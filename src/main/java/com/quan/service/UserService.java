@@ -11,7 +11,7 @@ import com.quan.constant.Constant;
 import com.quan.entity.Email;
 import com.quan.entity.WxLogin;
 import com.quan.entity.request.WxLoginRequest;
-import com.quan.entity.response.SearchUserResponse;
+import com.quan.entity.response.SearchByNameResponse;
 import com.quan.entity.response.UserInfoResponse;
 import com.quan.exception.GlobalException;
 import com.quan.feign.WxFeign;
@@ -157,16 +157,16 @@ public class UserService extends BaseService{
         return userInfo;
     }
 
-    public List<SearchUserResponse> searchUserByName(String name){
+    public List<SearchByNameResponse> searchUserByName(String name){
         List<User> users = userRepository.findAllByNickNameLikeAndStatus("%"+name+"%", CommonByteEnum.Normal.getKey());
         if (CollectionUtils.isEmpty(users)){
             return Lists.newArrayListWithCapacity(0);
         }
-        List<SearchUserResponse> result = Lists.newArrayListWithCapacity(users.size());
+        List<SearchByNameResponse> result = Lists.newArrayListWithCapacity(users.size());
         users.stream().forEach(user -> {
-            SearchUserResponse searchUserResponse = new SearchUserResponse();
+            SearchByNameResponse searchUserResponse = new SearchByNameResponse();
             searchUserResponse.setId(user.getId());
-            searchUserResponse.setNickName(user.getNickName());
+            searchUserResponse.setName(user.getNickName());
             result.add(searchUserResponse);
         });
         return result;

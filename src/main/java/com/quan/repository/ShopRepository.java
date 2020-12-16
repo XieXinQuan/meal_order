@@ -17,4 +17,6 @@ public interface ShopRepository extends JpaRepository<Shop, Integer> {
     Shop findFirstByNameAndStatus(String shopName, Byte status);
 
     List<Shop> findAllByShopManagerEqualsOrCreateUserOrderByIdAsc(Integer shopManager, Integer createUser);
+
+    List<Shop> findAllByNameLikeAndStatus(String name, Byte status);
 }

@@ -8,9 +8,9 @@ import lombok.Data;
  * DATE:2020/12/13
  */
 @Data
-public class SearchUserResponse {
+public class SearchByNameResponse {
 
     private Integer id;
 
-    private String nickName;
+    private String name;
 }

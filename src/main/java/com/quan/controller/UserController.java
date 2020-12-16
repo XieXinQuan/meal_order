@@ -1,7 +1,7 @@
 package com.quan.controller;
 
 import com.quan.entity.request.LoginRequest;
-import com.quan.entity.request.SearchUserRequest;
+import com.quan.entity.request.SearchByNameRequest;
 import com.quan.service.UserService;
 import com.quan.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/searchUserByName")
-    public Object searchUserByName(@Validated SearchUserRequest searchUserByName){
+    public Object searchUserByName(@Validated SearchByNameRequest searchUserByName){
         return userService.searchUserByName(searchUserByName.getName());
     }
 

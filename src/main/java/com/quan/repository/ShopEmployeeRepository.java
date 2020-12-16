@@ -4,6 +4,8 @@ import com.quan.model.ShopEmployee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author: xiexinquan520@163.com
  * User: XieXinQuan
@@ -11,4 +13,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ShopEmployeeRepository extends JpaRepository<ShopEmployee, Integer> {
+
+    List<ShopEmployee> findAllByShopId(Integer shopId);
+
+    List<ShopEmployee> findAllByUserIdOrCreateUser(Integer userId, Integer createUser);
 }

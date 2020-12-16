@@ -16,7 +16,7 @@ public class AddShopRequest {
     @Size(min = 5, max = 50, message = "店铺名称字数在5-50字之间")
     private String shopName;
 
-    @NotNull
+    @NotNull(message = "店铺经理不能为空")
     private Integer shopManager;
 
     @Size(min = 5, max = 200, message = "地址字数在5-200之间")
