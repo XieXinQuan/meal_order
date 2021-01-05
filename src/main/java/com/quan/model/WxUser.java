@@ -6,7 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @author: xiexinquan520@163.com
@@ -43,4 +43,9 @@ public class WxUser {
 
     @LastModifiedDate
     private Date updateTime;
+
+
+    @OneToOne
+    @JoinColumn(name="userId",referencedColumnName = "id", insertable = false, updatable = false)
+    private User user;
 }

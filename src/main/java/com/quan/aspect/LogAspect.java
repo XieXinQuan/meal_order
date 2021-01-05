@@ -1,6 +1,7 @@
 package com.quan.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.quan.Enum.ResultEnum;
 import com.quan.entity.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author: xiexinquan520@163.com
@@ -40,10 +42,13 @@ public class LogAspect {
         // 记录下请求内容
         log.info("Request Type : {}, URL : {}", request.getMethod(), request.getRequestURL().toString());
         log.info("Request Remote IP : {}", request.getRemoteAddr());
-        log.info("Request Parameter : {}", JSON.toJSONString(joinPoint.getArgs()));
+        List<String> ignore = Lists.newArrayList("/file/upload");
+        if (!ignore.contains(request.getServletPath())) {
+            log.info("Request Parameter : {}", JSON.toJSONString(joinPoint.getArgs()));
+        }
     }
     @AfterReturning(returning = "returnOb", pointcut = "controllerLog()")
-    public void doAfterReturning(JoinPoint joinPoint, Object returnOb) {
+    public void doAfterReturning(Object returnOb) {
         log.info("Request Success Return Data : {}", returnOb);
     }
     @Around("controllerLog()")

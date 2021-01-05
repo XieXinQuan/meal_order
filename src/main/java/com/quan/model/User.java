@@ -9,7 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author: xiexinquan520@163.com
@@ -54,4 +55,11 @@ public class User implements Serializable {
 
     @LastModifiedDate
     private Date updateTime;
+
+    @OneToMany(mappedBy = "userId")
+    private List<ShopEmployee> employees;
+
+    @OneToMany(mappedBy = "createUser")
+    private List<ShopEmployee> createEmployees;
+
 }

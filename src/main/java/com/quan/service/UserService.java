@@ -19,6 +19,7 @@ import com.quan.model.User;
 import com.quan.model.WxUser;
 import com.quan.repository.UserRepository;
 import com.quan.repository.WxUserRepository;
+import com.quan.util.JwtUtil;
 import com.quan.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -114,31 +115,40 @@ public class UserService extends BaseService{
         log.info("发起微信小程序的获取用户openid接口 -- Response : {}", wxUserInfo);
 
         String openid = wxUserInfo.getString("openid");
-        if (org.apache.commons.lang.StringUtils.isEmpty(openid)){
-            return "微信登录失败, 请授权";
+        if (StringUtils.isEmpty(openid)){
+            throw new GlobalException(ResultEnum.CustomException.getKey(), "请授权微信登录.");
         }
 
         //查询数据库是否登录过
         WxUser firstByWxAppId = wxUserRepository.findFirstByWxAppId(openid);
-        WxUser wxUser = new WxUser();
+
+        Integer userId = null;
         if (firstByWxAppId == null){
+            WxUser wxUser = new WxUser();
             //创建user 设置用户信息
             User user = new User();
-            user.setUserName(wxLoginRequest.getWxNickName());
+            user.setUserName(String.valueOf(RandomUtil.randomInt(100000, 999999)));
+            user.setNickName(wxLoginRequest.getWxNickName());
             int randomPassword = RandomUtil.randomInt(100000, 999999);
             user.setPassword(String.valueOf(randomPassword));
             //设置默认值
             user.setType(UserTypeEnum.NormalUser.getKey());
             user.setStatus(CommonByteEnum.Normal.getKey());
+            //判断男女
+            user.setSex(wxLoginRequest.getGender().equals(1) ? "M" : wxLoginRequest.getGender().equals(2) ? "F" : "N");
             userRepository.saveAndFlush(user);
 
             wxUser.setUserId(user.getId());
+            BeanUtils.copyProperties(wxLoginRequest, wxUser);
+            wxUser.setWxAppId(openid);
+            wxUserRepository.save(wxUser);
+
+            userId = user.getId();
+        }else {
+            userId = firstByWxAppId.getUserId();
         }
 
-        BeanUtils.copyProperties(wxLoginRequest, wxUser);
-        wxUser.setWxAppId(openid);
-        wxUserRepository.save(wxUser);
-        return "微信授权成功";
+        return JwtUtil.createToken(userId);
     }
 
     public UserInfoResponse userInfo(){

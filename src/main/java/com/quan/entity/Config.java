@@ -1,8 +1,6 @@
 package com.quan.entity;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * @author: xiexinquan520@163.com
@@ -10,8 +8,8 @@ import org.springframework.stereotype.Component;
  * DATE:2020/11/15
  */
 @Data
-@Component
+//@Component
 public class Config {
-    @Value("${server.port}")
-    private Integer serverPort;
+//    @Value("${server.port}")
+//    private Integer serverPort;
 }

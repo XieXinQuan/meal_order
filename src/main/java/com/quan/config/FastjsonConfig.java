@@ -41,6 +41,7 @@ public class FastjsonConfig {
         // 参考它的做法, fastjson也只添加application/json的MediaType
         List<MediaType> fastMediaTypes = new ArrayList<>();
         fastMediaTypes.add(MediaType.APPLICATION_JSON);
+        fastMediaTypes.add(MediaType.TEXT_PLAIN);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
         return new HttpMessageConverters(fastJsonHttpMessageConverter);
     }

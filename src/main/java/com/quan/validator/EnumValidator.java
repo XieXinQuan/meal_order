@@ -28,30 +28,20 @@ public class EnumValidator implements ConstraintValidator<EnumValue, Object> {
         if(!aClass.isEnum()){
             return false;
         }
-
-//        value = Optional.ofNullable(value).orElse(0);
-
         //获取所有枚举值
         Object[] enumConstants = aClass.getEnumConstants();
-
         // 获取getKey 方法
         Method getKey = aClass.getMethod("getKey");
-
         for (Object obj : enumConstants){
-
             //取得枚举值
             Object invoke = getKey.invoke(obj);
-
             if (invoke instanceof Integer
                 || invoke instanceof Byte){
                 if(invoke == value){
                     return true;
                 }
             }
-
         }
-
-
         return false;
     }
 }

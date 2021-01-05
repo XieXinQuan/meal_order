@@ -1,14 +1,11 @@
 package com.quan.util;
 
+import cn.hutool.core.util.ArrayUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.commons.util.InetUtils;
-import org.springframework.stereotype.Component;
+import org.apache.commons.lang.StringUtils;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * @author: xiexinquan520@163.com
@@ -18,26 +15,25 @@ import java.net.UnknownHostException;
 @Slf4j
 public class CommonUtil {
 
-    private static String localHost;
-    static {
-        try {
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            String hostAddress = inetAddress.getHostAddress();
-            localHost = hostAddress;
-        }catch (UnknownHostException e){}
+    public static String getServerAddress(HttpServletRequest request){
+        String result = "http";
+        StringBuffer requestURL = request.getRequestURL();
+        String requestUrl = requestURL.toString();
+        boolean isHttp = StringUtils.startsWith(requestUrl, "http://");
+        result += isHttp ? "" : "s";
+        result += "://";
+        requestUrl = requestUrl.replace(result, "");
+        return result + requestUrl.substring(0, requestUrl.indexOf("/") == -1 ? requestUrl.length() : requestUrl.indexOf("/"));
     }
 
-    public static String getServerIp(){
-        return localHost;
-    }
-    public static String getServerWebFilePath(){
-        return "http://" + localHost + "/files/";
-    }
-    public static String getProjectPath(){
+    public static String getUserDir(){
         return System.getProperty("user.dir");
     }
-    public static String getImagePath(){
-        return getProjectPath() + File.separator + "files" + File.separator;
-    }
 
+    public static String joinFilePath(String ... str){
+        if (ArrayUtil.isEmpty(str)){
+            return StringUtils.EMPTY;
+        }
+        return StringUtils.join(str, File.separator);
+    }
 }

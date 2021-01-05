@@ -22,14 +22,10 @@ public class BaseService {
     @Resource
     protected UserRepository userRepository;
 
-    HttpServletRequest request;
-
     public Integer getCurrentUserId(){
+        HttpServletRequest request = this.getHttpServletRequest();
 
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        this.request = request;
-        if (!this.checkIsLogin()) {
+        if (!this.checkIsLogin(request)) {
             throw new GlobalException(ResultEnum.GoToLogin.getKey());
         }
 
@@ -38,7 +34,13 @@ public class BaseService {
 
         return Integer.parseInt(subject);
     }
-    private boolean checkIsLogin(){
+
+    protected HttpServletRequest getHttpServletRequest(){
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        return  ((ServletRequestAttributes) requestAttributes).getRequest();
+    }
+
+    private boolean checkIsLogin(HttpServletRequest request){
         if (request == null || request.getHeader(Constant.jwtHeader) == null) {
             return false;
         }

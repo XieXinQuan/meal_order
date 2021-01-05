@@ -41,6 +41,9 @@ public class WebConfigurer implements WebMvcConfigurer {
         //放行
         registration.excludePathPatterns(
 
+                "/wx/isLoginState",
+                "/wx/login",
+                "/huanting",
                 "/",
                 "/user/login",
                 "/user/register",

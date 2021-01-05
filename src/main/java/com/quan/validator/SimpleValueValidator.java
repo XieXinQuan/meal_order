@@ -18,9 +18,13 @@ public class SimpleValueValidator implements ConstraintValidator<SimpleValue, In
     }
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
-        if (value == null || values.length == 0) return false;
+        if (value == null || values.length == 0) {
+            return false;
+        }
         for (int val : values){
-            if (val == value) return true;
+            if (val == value) {
+                return true;
+            }
         }
         return false;
     }

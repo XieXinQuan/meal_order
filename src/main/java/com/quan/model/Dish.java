@@ -1,6 +1,9 @@
 package com.quan.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -9,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @author: xiexinquan520@163.com
@@ -20,6 +23,9 @@ import java.sql.Date;
 @Entity
 @Table(name = "dish")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +39,7 @@ public class Dish {
 
     private Byte category;
 
-    private BigDecimal discount;
+    private BigDecimal disCount;
 
     private BigDecimal price;
 
@@ -56,4 +62,11 @@ public class Dish {
 
     @LastModifiedDate
     private Date updateTime;
+
+    @OneToOne
+    @JoinColumn(name="shopId",referencedColumnName = "id", insertable = false, updatable = false)
+    private Shop shop;
+    @OneToOne
+    @JoinColumn(name="createUser",referencedColumnName = "id", insertable = false, updatable = false)
+    private User user;
 }
